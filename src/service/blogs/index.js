@@ -58,9 +58,13 @@ blogsRouter.get("/:_id",(req,res,next)=>{
     try {
     const blogsArray = getBlogs()
     const blogId = req.params._id
-    const singleBlog = blogsArray.find(blog => blog._id === blogId)
-    res.status().send(singleBlog)
-    next()
+    const searchedBlog = blogsArray.find(blog => blog._id === blogId)
+
+    if (searchedBlog) {
+        res.send(searchedBlog)
+      } else {
+        next(createHttpError(404, `Book with id ${req.params._id} not found!`))
+      }
 
     } catch (error) {
         next(error)
