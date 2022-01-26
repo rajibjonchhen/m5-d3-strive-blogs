@@ -15,32 +15,46 @@ const writeBlogs = content => fs.writeFileSync(blogsJSONPath,JSON.stringify(cont
 
 // for posting new blogs
 blogsRouter.post("/",(req,res,next)=>{
+    try {
     const blogsArray = getBlogs()
     const newBlog = {...req.body,createdAt:new Date(),_id:uniqid()}
     blogsArray.push(newBlog)
     writeBlogs(blogsArray)
     res.status().send({msg:"New blog added with the id - " +_id})
+    } catch (error) {
+        
+    }
+    
     
 })
 
 // for getting list of blogs
 blogsRouter.get("/",(req,res,next)=>{
-    const blogsArray = getBlogs()
+    try {
+        const blogsArray = getBlogs()
   
     res.status().send()
+    } catch (error) {
+        
+    }
 })
 
 // for getting single blog from array
 blogsRouter.get("/:_id",(req,res,next)=>{
+    try {
     const blogsArray = getBlogs()
     const blogId = req.params._id
     const singleBlog = blogsArray.find(blog => blog._id === blogId)
     res.status().send(singleBlog)
+    } catch (error) {
+        
+    }
 })
 
 // for editing the post with id
 blogsRouter.put("/:_id",(req,res,next)=>{
-    const blogsArray = getBlogs()
+    try {
+        const blogsArray = getBlogs()
     const blogId = req.params._id
     const index = blogsArray.findIndex(blog => blog._id === blogId)
     const oldBlog = blogsArray[index]
@@ -48,14 +62,22 @@ blogsRouter.put("/:_id",(req,res,next)=>{
     blogsArray[index] = updatedBlog
     writeBlogs(blogsArray)
     res.status().send
+    } catch (error) {
+        
+    }
     
 })
 
     // for deleting the post with id
     blogsRouter.delete("/:_id",(req,res,next)=>{
+        try {
         const blogsArray = getBlogs()
         const blogId = req.params._id
         const remainingBlogs = blogsArray.filter(blog => blog._id !== blogId)
+        writeBlogs(remainingBlogs)
+        } catch (error) {
+            
+        }
 
     })
 
