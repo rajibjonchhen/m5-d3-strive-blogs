@@ -1,0 +1,30 @@
+{
+  "name": "m5-d3-strive-blogs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type":"module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"nodemon -e js ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajibjonchhen/m5-d3-strive-blogs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rajibjonchhen/m5-d3-strive-blogs/issues"
+  },
+  "homepage": "https://github.com/rajibjonchhen/m5-d3-strive-blogs#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "express-list-endpoints": "^6.0.0",
+    "uniqid": "^5.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
