@@ -20,13 +20,13 @@ const blogsRouter = express.Router()
 
 
 // for posting new blogs
-blogsRouter.post("/",newBlogValidation, async (req,res,next)=>{
+blogsRouter.post("/", newBlogValidation, async (req,res,next)=>{ 
     try {
     const errorsList = validationResult(req)
-    if(errorsList.isEmpty()){
+    if(errorsList.isEmpty()){ 
         const blogsArray = await getBlogs()
         const uniqId = uniqid()
-        const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:""}
+        const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[]}
         blogsArray.push(newBlog)
        await writeBlogs(blogsArray)
         res.status(201).send({msg:"New blog added with the id - " +blogId})
@@ -130,9 +130,12 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
             const index = blogsArray.findIndex(blog => blog.blogId === blogId)
             if (index) {
                 const oldBlog = blogsArray[index]
-                // oldBlog.comments =[]
-                const newComment = {...req.body, commentId:uniqid()}
-                const updatedBlog = {...oldBlog,comments:comments.push(newComment)}
+                console.log("the old blog is ", oldBlog)
+                const newComment = {...req.body, commentId:uniqid(),  commentedAt:new Date()}
+                console.log("the new comment is ", newComment)
+                const updatedBlog = {...oldBlog,comments:[...oldBlog.comments,newComment]}
+                oldBlog.comments.push(newComment)
+                console.log("the updated blog is ", updatedBlog)
                 blogsArray[index] = updatedBlog
                 await writeBlogs(blogsArray)
                 res.send(updatedBlog)
@@ -144,6 +147,23 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
                 next(error)
             }
     })
+// for getting comments
+blogsRouter.get("/:blogId/comments", async (req,res,next)=>{
+    try {
+    const blogsArray =  await getBlogs()
+    const blogId = req.params.blogId
+    const searchedBlog = blogsArray.find(blog => blog.blogId === blogId)
+
+    if (searchedBlog) {
+        res.send(searchedBlog.comments)
+      } else {
+        next(createHttpError(404, `Book with id ${req.params.blogId} not found!`))
+      }
+
+    } catch (error) {
+        next(error)
+    }
+})
 
 
 export default blogsRouter
