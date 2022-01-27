@@ -3,7 +3,7 @@ import fs from 'fs'
 import uniqid from 'uniqid'
 import { writeAuthors, getAuthors } from "../../lib/fs-tools.js";
 import multer from 'multer'
-import { saveAuthorAvatar } from "../../lib/fs-tools.js"
+
 
 const authorsRouter = express.Router()
 
@@ -89,18 +89,6 @@ authorsRouter.delete("/:authorId",async(req,res)=>{
     res.status(204).send(newArray)
 })
 
-
-// for uploading the avatar
-authorsRouter.post("/:authorId/uploadAvatar", multer().single("avatar"), async (req, res, next) => {
-  try {
-    const authorId = req.params.authorId
-    console.log("FILE: ", req.file)
-    await saveAuthorAvatar(`${authorId}`, req.file.buffer)
-    res.send("author's avatar added")
-  } catch (error) {
-    next(error)
-  }
-})
 
 
 
