@@ -45,8 +45,7 @@ blogsRouter.get("/",(req,res,next)=>{
     } else {
         res.send(blogsArray)
     }
-    const blogsArray = getBlogs()
-    res.status().send(blogsArray)
+     
 
     } catch (error) {
         next(error)
@@ -81,8 +80,8 @@ blogsRouter.put("/:_id",(req,res,next)=>{
     const updatedBlog = {...oldBlog, ...req.body, updatedAt:new Date()}
     blogsArray[index] = updatedBlog
     writeBlogs(blogsArray)
-    res.status().send()
-    next()
+    res.send(updatedBlog)
+     
 
     } catch (error) {
         next(error)
