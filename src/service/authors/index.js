@@ -88,6 +88,17 @@ authorsRouter.delete("/:authorId",async(req,res)=>{
 })
 
 
+// for uploading the image
+authorsRouter.post("/uploadSingleAvatar", multer().single("avatar"), async (req, res, next) => {
+    try {
+      console.log("FILE: ", req.file)
+      await saveAuthorAvatar(req.file.originalname, req.file.buffer)
+      res.send("author's avatar added")
+    } catch (error) {
+      next(error)
+    }
+  })
+
 
 
 export default  authorsRouter

@@ -21,7 +21,8 @@ blogsRouter.post("/",newBlogValidation, async (req,res,next)=>{
     const errorsList = validationResult(req)
     if(errorsList.isEmpty()){
         const blogsArray = await getBlogs()
-        const newBlog = {...req.body,createdAt:new Date(),_id:uniqid()}
+        const uniqId = uniqid()
+        const newBlog = {...req.body,createdAt:new Date(),_id:uniqId, cover:""}
         blogsArray.push(newBlog)
        await writeBlogs(blogsArray)
         res.status(201).send({msg:"New blog added with the id - " +_id})

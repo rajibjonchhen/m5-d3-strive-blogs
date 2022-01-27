@@ -5,7 +5,7 @@ import { join, dirname } from "path"
 const { readJSON, writeJSON, writeFile } = fs
 
 const dataFolderPath = join(dirname(fileURLToPath(import.meta.url)), "../data")
-const usersPublicFolderPath = join(process.cwd(), "./public/img")
+const usersPublicFolderPath = join(process.cwd(), "./public/image")
 
 const authorsJSONPath = join(dataFolderPath, "authors.json")
 const blogsJSONPath = join(dataFolderPath, "blogs.json")
@@ -16,5 +16,6 @@ export const writeAuthors = content => writeJSON(authorsJSONPath, content)
 export const getBlogs = () => readJSON(blogsJSONPath)
 export const writeBlogs = content => writeJSON(blogsJSONPath, content)
 
-export const saveUsersAvatars = (filename, contentAsABuffer) => writeFile(join(usersPublicFolderPath, filename), contentAsABuffer)
+export const saveAuthorAvatar = (filename, contentAsABuffer) => writeFile(join(usersPublicFolderPath, filename), contentAsABuffer)
+export const saveBlogPostCover = (filename, contentAsABuffer) => writeFile(join(usersPublicFolderPath, filename), contentAsABuffer)
 

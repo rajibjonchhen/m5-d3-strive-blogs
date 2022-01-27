@@ -2,6 +2,7 @@ import express from 'express'
 import listEndpoints from 'express-list-endpoints'
 import blogsRouter from './service/blogs/index.js'
 import authorsRouter from './service/authors/index.js'
+import filesRouter from './service/files/index.js'
 import cors from 'cors'
 import createHttpError from "http-errors"
 import { badRequestHandler, unauthorizedHandler, notFoundHandler, genericErrorHandler } from './service/errorHandler.js'
@@ -16,6 +17,7 @@ console.table(listEndpoints(server))
 
 server.use("/blogs",blogsRouter)
 server.use("/authors",authorsRouter)
+server.use("/files", filesRouter)
 
 server.use(badRequestHandler)
 server.use(unauthorizedHandler)
