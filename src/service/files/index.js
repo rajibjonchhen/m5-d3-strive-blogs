@@ -17,13 +17,13 @@ const filesRouter = express.Router()
 
 
 // for cover picture
-filesRouter.post("/uploadSingleCover", multer().single("cover"), async (req, res, next) =>{
-    try {
-        await saveBlogPostCover(req.file.originalname, req.file.buffer)
-        res.send("cover photo added")
-    } catch (error) {
+// filesRouter.post("/uploadSingleCover", multer().single("cover"), async (req, res, next) =>{
+//     try {
+//         await saveBlogPostCover(req.file.originalname, req.file.buffer)
+//         res.send("cover photo added")
+//     } catch (error) {
         
-    }
-    })
+//     }
+//     })
 
 export default filesRouter

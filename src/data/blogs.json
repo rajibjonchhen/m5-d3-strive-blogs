@@ -13,7 +13,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T15:22:31.137Z",
-    "_id": "6lhl18q1kyvp4vvl",
+    "blogId": "6lhl18q1kyvp4vvl",
     "comments":[{
       "comment":"its nice",
       "rate":"4"
@@ -33,7 +33,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T15:22:32.019Z",
-    "_id": "6lhl18q1kyvp4wk3"
+    "blogId": "6lhl18q1kyvp4wk3"
   },
   {
     "category": "Scifi",
@@ -49,7 +49,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T15:41:39.985Z",
-    "_id": "6lhl19hfkyvptic2"
+    "blogId": "6lhl19hfkyvptic2"
   },
   {
     "category": "Romantic",
@@ -65,7 +65,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T15:48:57.313Z",
-    "_id": "6lhl19qzkyvq2vs2"
+    "blogId": "6lhl19qzkyvq2vs2"
   },
   {
     "category": "Horror",
@@ -81,7 +81,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T16:07:03.368Z",
-    "_id": "6lhl1aa5kyvqq5s9"
+    "blogId": "6lhl1aa5kyvqq5s9"
   },
   {
     "category": "Horror",
@@ -97,7 +97,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T16:08:08.898Z",
-    "_id": "6lhl1aa5kyvqrkci"
+    "blogId": "6lhl1aa5kyvqrkci"
   },
   {
     "category": "History",
@@ -113,7 +113,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T16:16:08.080Z",
-    "_id": "6lhl1al1kyvr1u35"
+    "blogId": "6lhl1al1kyvr1u35"
   },
   {
     "category": "History",
@@ -129,7 +129,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T16:20:29.988Z",
-    "_id": "6lhl1an3kyvr7g6d"
+    "blogId": "6lhl1an3kyvr7g6d"
   },
   {
     "category": "History",
@@ -145,7 +145,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T16:20:31.320Z",
-    "_id": "6lhl1an3kyvr7h7c"
+    "blogId": "6lhl1an3kyvr7h7c"
   },
   {
     "category": "History",
@@ -161,7 +161,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T16:20:31.901Z",
-    "_id": "6lhl1an3kyvr7hnh"
+    "blogId": "6lhl1an3kyvr7hnh"
   },
   {
     "category": "History",
@@ -177,7 +177,7 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T16:21:00.972Z",
-    "_id": "6lhl1an3kyvr8430"
+    "blogId": "6lhl1an3kyvr8430"
   },
   {
     "category": "History",
@@ -193,6 +193,6 @@
     },
     "content": "HTML",
     "createdAt": "2022-01-26T16:22:28.660Z",
-    "_id": "6lhl1aq2kyvr9zqt"
+    "blogId": "6lhl1aq2kyvr9zqt"
   }
 ]

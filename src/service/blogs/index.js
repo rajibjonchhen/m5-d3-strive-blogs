@@ -7,6 +7,10 @@ import createHttpError from "http-errors"
 import { validationResult } from "express-validator"
 import { newBlogValidation } from "./validation.js" 
 import { getBlogs, writeBlogs } from "../../lib/fs-tools.js";
+import { saveBlogPostCover } from "../../lib/fs-tools.js"
+
+import multer from 'multer'
+
 const blogsRouter = express.Router()
 
 // const currentFilePath = fileURLToPath(import.meta.url)
@@ -22,10 +26,10 @@ blogsRouter.post("/",newBlogValidation, async (req,res,next)=>{
     if(errorsList.isEmpty()){
         const blogsArray = await getBlogs()
         const uniqId = uniqid()
-        const newBlog = {...req.body,createdAt:new Date(),_id:uniqId, cover:""}
+        const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:""}
         blogsArray.push(newBlog)
        await writeBlogs(blogsArray)
-        res.status(201).send({msg:"New blog added with the id - " +_id})
+        res.status(201).send({msg:"New blog added with the id - " +blogId})
     } else{
         next(createHttpError(400,"Error in creating new post",{errorsList}))
     }
@@ -53,16 +57,16 @@ blogsRouter.get("/", async (req,res,next)=>{
 })
 
 // for getting single blog from array
-blogsRouter.get("/:_id", async (req,res,next)=>{
+blogsRouter.get("/:blogId", async (req,res,next)=>{
     try {
     const blogsArray =  await getBlogs()
-    const blogId = req.params._id
-    const searchedBlog = blogsArray.find(blog => blog._id === blogId)
+    const blogId = req.params.blogId
+    const searchedBlog = blogsArray.find(blog => blog.blogId === blogId)
 
     if (searchedBlog) {
         res.send(searchedBlog)
       } else {
-        next(createHttpError(404, `Book with id ${req.params._id} not found!`))
+        next(createHttpError(404, `Book with id ${req.params.blogId} not found!`))
       }
 
     } catch (error) {
@@ -71,11 +75,11 @@ blogsRouter.get("/:_id", async (req,res,next)=>{
 })
 
 // for editing the post with id
-blogsRouter.put("/:_id", async (req,res,next)=>{
+blogsRouter.put("/:blogId", async (req,res,next)=>{
     try {
     const blogsArray =  await getBlogs()
-    const blogId = req.params._id
-    const index = blogsArray.findIndex(blog => blog._id === blogId)
+    const blogId = req.params.blogId
+    const index = blogsArray.findIndex(blog => blog.blogId === blogId)
     const oldBlog = blogsArray[index]
     const updatedBlog = {...oldBlog, ...req.body, updatedAt:new Date()}
     blogsArray[index] = updatedBlog
@@ -91,11 +95,11 @@ blogsRouter.put("/:_id", async (req,res,next)=>{
 })
 
     // for deleting the post with id
-    blogsRouter.delete("/:_id", async (req,res,next)=>{
+    blogsRouter.delete("/:blogId", async (req,res,next)=>{
         try {
         const blogsArray =  await getBlogs()
-        const blogId = req.params._id
-        const remainingBlogs = blogsArray.filter(blog => blog._id !== blogId)
+        const blogId = req.params.blogId
+        const remainingBlogs = blogsArray.filter(blog => blog.blogId !== blogId)
         await writeBlogs(remainingBlogs)
         res.status(204).send()
 
@@ -106,13 +110,24 @@ blogsRouter.put("/:_id", async (req,res,next)=>{
 
     })
 
+    // for uploading cover image
+   blogsRouter.post("/:blogId/uploadCover", multer().single("cover"), async (req, res, next) =>{
+        try {
+            const blogId = req.params.blogId
+            await saveBlogPostCover(`${blogId}`, req.file.buffer)
+            res.send("cover photo added")
+        } catch (error) {
+            
+        }
+        })
+
 
     // for commenting a
-    blogsRouter.post("/:_id/comments",  async (req, res, next) =>{
+    blogsRouter.post("/:blogId/comments",  async (req, res, next) =>{
         try {
             const blogsArray = await getBlogs()
-            const blogId = req.params._id
-            const index = blogsArray.findIndex(blog => blog._id === blogId)
+            const blogId = req.params.blogId
+            const index = blogsArray.findIndex(blog => blog.blogId === blogId)
             if (index) {
                 const oldBlog = blogsArray[index]
                 // oldBlog.comments =[]
@@ -122,7 +137,7 @@ blogsRouter.put("/:_id", async (req,res,next)=>{
                 await writeBlogs(blogsArray)
                 res.send(updatedBlog)
               } else {
-                next(createHttpError(404, `Book with id ${req.params._id} not found!`))
+                next(createHttpError(404, `Book with id ${req.params.blogId} not found!`))
               }
         
             } catch (error) {

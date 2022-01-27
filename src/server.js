@@ -2,7 +2,9 @@ import express from 'express'
 import listEndpoints from 'express-list-endpoints'
 import blogsRouter from './service/blogs/index.js'
 import authorsRouter from './service/authors/index.js'
-import filesRouter from './service/files/index.js'
+// import filesRouter from './service/files/index.js'
+import { join, dirname } from "path";
+
 import cors from 'cors'
 import createHttpError from "http-errors"
 import { badRequestHandler, unauthorizedHandler, notFoundHandler, genericErrorHandler } from './service/errorHandler.js'
@@ -10,14 +12,17 @@ import { badRequestHandler, unauthorizedHandler, notFoundHandler, genericErrorHa
 const server = express()
 const port = 3001
 
+const publicFolderPath = join(process.cwd(), "./public")
+
 server.use(cors())
 
 server.use(express.json())
+server.use(express.static(publicFolderPath))
 console.table(listEndpoints(server))
 
 server.use("/blogs",blogsRouter)
 server.use("/authors",authorsRouter)
-server.use("/files", filesRouter)
+// server.use("/files", filesRouter)
 
 server.use(badRequestHandler)
 server.use(unauthorizedHandler)
