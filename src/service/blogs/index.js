@@ -1,15 +1,13 @@
+
 import express from "express";
 import fs from "fs"
 import uniqid from 'uniqid'
-import { fileURLToPath } from "url";
-import { join, dirname } from "path";
+import multer from 'multer'
 import createHttpError from "http-errors"
 import { validationResult } from "express-validator"
 import { newBlogValidation } from "./validation.js" 
-import { getBlogs, writeBlogs } from "../../lib/fs-tools.js";
-import { saveBlogPostCover, saveAuthorAvatar } from "../../lib/fs-tools.js"
+import { getBlogs, coverUploader, writeBlogs ,avatarUploader} from "../../lib/fs-tools.js";
 
-import multer from 'multer'
 
 const blogsRouter = express.Router()
 
@@ -110,31 +108,49 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
 
     })
 
+
+
     // for uploading cover image
-   blogsRouter.post("/:blogId/uploadCover", multer().single("cover"), async (req, res, next) =>{
-        try {
+    blogsRouter.put("/:blogId/uploadCover",  multer().single("image"), coverUploader, async (req, res, next) =>{
+      console.log(req.file.imageUrl)    
+      console.log('hi')
+    try {
             const blogId = req.params.blogId
-            await saveBlogPostCover(`${blogId}`, req.file.buffer)
+            const blogsArray = await getBlogs()
+            const index = blogsArray.findIndex(blog => blog.blogId === blogId)
+            const oldBlog = blogsArray[index]
+            const updatedBlog = {...oldBlog, cover:req.file.imageUrl, updatedAt:new Date()}
+            blogsArray[index]  = updatedBlog
+            await writeBlogs(blogsArray)
             res.send("cover photo added")
         } catch (error) {
-            
+         next(error)   
         }
         })
+
+    
     
         // for uploading the avatar
-blogsRouter.post("/:blogId/uploadAvatar", multer().single("avatar"), async (req, res, next) => {
-    try {
-      const authorId = req.params.authorId
-      console.log("FILE: ", req.file)
-      await saveAuthorAvatar(`${authorId}`, req.file.buffer)
-      res.send("author's avatar added")
+blogsRouter.put("/:blogId/uploadAvatar", multer().single("image"), avatarUploader, async (req, res, next) => {
+  
+  
+  try {
+    const blogId = req.params.blogId
+    const blogsArray = await getBlogs()
+    const index = blogsArray.findIndex(blog => blog.blogId === blogId)
+    const oldBlog  = blogsArray[index]
+    const updatedBlog = {...oldBlog, author:{...author, avatar:req.file, updatedAt: new Date()}}
+    blogsArray[index] = updatedBlog
+    await writeBlogs(blogsArray)
+    
+    res.send("author's avatar added")
+    console.log("author's avatar added",req.file.imageUrl)    
     } catch (error) {
       next(error)
     }
   })
   
   
-
 
     // for commenting a
     blogsRouter.post("/:blogId/comments",  async (req, res, next) =>{
