@@ -139,12 +139,12 @@ blogsRouter.put("/:blogId/uploadAvatar", multer().single("image"), avatarUploade
     const blogsArray = await getBlogs()
     const index = blogsArray.findIndex(blog => blog.blogId === blogId)
     const oldBlog  = blogsArray[index]
-    const updatedBlog = {...oldBlog, author:{...author, avatar:req.file, updatedAt: new Date()}}
+    const updatedBlog = {...oldBlog, author:{...author, avatar:req.file.imageUrl, updatedAt: new Date()}}
     blogsArray[index] = updatedBlog
+    console.log("author's avatar added",req.file.imageUrl)    
     await writeBlogs(blogsArray)
     
     res.send("author's avatar added")
-    console.log("author's avatar added",req.file.imageUrl)    
     } catch (error) {
       next(error)
     }

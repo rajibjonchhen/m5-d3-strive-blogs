@@ -31,9 +31,6 @@ export const coverUploader = (req, res, next) => {
         
         const fileName =`${req.params.blogId}${extenstion}`
         const pathToFile = join(blogsPublicFolderPath, fileName)
-        // fs.writeFile(pathToFile, buffer)
-        console.log("I am consoling", pathToFile)
-        console.log("i m runnig",pathToFile, fileName)
         const imageUrl = `http://localhost3001/${fileName}`
         req.file.imageUrl =imageUrl
         fs.writeFileSync(pathToFile, buffer)
@@ -43,16 +40,17 @@ export const coverUploader = (req, res, next) => {
     }
 }
 
-export const avatarUploader = async(req, res, next) => {
+export const avatarUploader = (req, res, next) => {
     try {
         const {originalname, buffer} = req.file
         const extenstion  = extname(originalname)
         const fileName =`${req.params.blogId}${extenstion}`
         const pathToFile = join(authorsPublicFolderPath, fileName)
         
-        await fs.writeFile(pathToFile, buffer)
         const imageUrl = `http://localhost3001/${fileName}`
-        req.file =imageUrl
+        req.file.imageUrl =imageUrl
+        fs.writeFileSync(pathToFile, buffer)
+        console.log("i m runnig",fs.file.imageUrl, fileName)
         next()
     } catch (error) {
         next(error)
