@@ -6,7 +6,7 @@ import multer from 'multer'
 import createHttpError from "http-errors"
 import { validationResult } from "express-validator"
 import { newBlogValidation } from "./validation.js" 
-import { getBlogs, coverUploader, writeBlogs ,avatarUploader} from "../../lib/fs-tools.js";
+import { getBlogs, writeBlogs, uploadCover ,uploadAvatar} from "../../lib/fs-tools.js";
 
 
 const blogsRouter = express.Router()
@@ -111,7 +111,7 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
 
 
     // for uploading cover image
-    blogsRouter.put("/:blogId/uploadCover",  multer().single("image"), coverUploader, async (req, res, next) =>{
+    blogsRouter.put("/:blogId/uploadCover",  multer().single("image"), uploadCover, async (req, res, next) =>{
       console.log(req.file.imageUrl)    
       console.log('hi')
     try {
@@ -131,15 +131,14 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
     
     
         // for uploading the avatar
-blogsRouter.put("/:blogId/uploadAvatar", multer().single("image"), avatarUploader, async (req, res, next) => {
-  
-  
+blogsRouter.put("/:blogId/uploadAvatar", multer().single("image"), uploadAvatar, async (req, res, next) => {  
   try {
     const blogId = req.params.blogId
     const blogsArray = await getBlogs()
     const index = blogsArray.findIndex(blog => blog.blogId === blogId)
     const oldBlog  = blogsArray[index]
-    const updatedBlog = {...oldBlog, author:{...author, avatar:req.file.imageUrl, updatedAt: new Date()}}
+    console.log("i m runnig", req.file.imageUrl)
+    const updatedBlog = {...oldBlog, author:{...oldBlog.author, avatar:req.file.imageUrl, updatedAt: new Date()}}
     blogsArray[index] = updatedBlog
     console.log("author's avatar added",req.file.imageUrl)    
     await writeBlogs(blogsArray)

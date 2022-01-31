@@ -22,13 +22,12 @@ export const writeBlogs = content => writeJSON(blogsJSONPath, content)
 
 
 
-
-export const coverUploader = (req, res, next) => {
+ 
+export const uploadCover = (req, res, next) => {
     
     try {
         const {originalname, buffer} = req.file
         const extenstion = extname(originalname)
-        
         const fileName =`${req.params.blogId}${extenstion}`
         const pathToFile = join(blogsPublicFolderPath, fileName)
         const imageUrl = `http://localhost3001/${fileName}`
@@ -40,17 +39,16 @@ export const coverUploader = (req, res, next) => {
     }
 }
 
-export const avatarUploader = (req, res, next) => {
+export const uploadAvatar = (req, res, next) => {
     try {
         const {originalname, buffer} = req.file
         const extenstion  = extname(originalname)
         const fileName =`${req.params.blogId}${extenstion}`
         const pathToFile = join(authorsPublicFolderPath, fileName)
-        
         const imageUrl = `http://localhost3001/${fileName}`
         req.file.imageUrl =imageUrl
         fs.writeFileSync(pathToFile, buffer)
-        console.log("i m runnig",fs.file.imageUrl, fileName)
+        
         next()
     } catch (error) {
         next(error)
