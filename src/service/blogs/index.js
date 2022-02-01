@@ -7,15 +7,20 @@ import createHttpError from "http-errors"
 import { validationResult } from "express-validator"
 import { newBlogValidation } from "./validation.js" 
 import { getBlogs, writeBlogs, uploadCover ,uploadAvatar} from "../../lib/fs-tools.js";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { v2 } from "cloudinary";
 
 
 const blogsRouter = express.Router()
 
-// const currentFilePath = fileURLToPath(import.meta.url)
-// const parentFolderPath = dirname(currentFilePath)
-// const blogsJSONPath  = join(parentFolderPath, 'blogs.json')
-
-
+const cloudinaryUploader = multer({
+  storage: new CloudinaryStorage({
+    v2,
+    params:{
+      folder:'blogs'
+    }
+  })
+}).single("image")
 
 // for posting new blogs
 blogsRouter.post("/",  async (req,res,next)=>{ 
@@ -108,10 +113,49 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
 
     })
 
+// upload avatar with cloudinary avatar
+    filesRouter.put("/:blogId/cloudinaryUploadAvatar", cloudinaryUploader, async (req, res, next) => {
+      try {
+        console.log(req.file)
+        const blogs = await getBlogs()
+    
+        const index = blogs.findIndex(blog => blog.id === req.params.blogId)
+    
+        const oldBlog= blogs[index]
+    
+        const updatedBlog = { ...oldBlog, author:{...oldBlog.author,avatar: req.file.path }}
+    
+        blogs[index] = updatedBlog
+    
+        await writeBlogs(blogs)
+        res.send("Uploaded on Cloudinary!")
+      } catch (error) {
+        next(error)
+      }
+    })
 
-
+    // upload cover with cloudinary
+    filesRouter.put("/:blogId/cloudinaryUploadCover", cloudinaryUploader, async (req, res, next) => {
+      try {
+        console.log(req.file)
+        const blogs = await getBlogs()
+    
+        const index = blogs.findIndex(blog => blog.id === req.params.blogId)
+    
+        const oldBlog= blogs[index]
+    
+        const updatedBlog = { ...oldBlog, cover: req.file.path }
+    
+        blogs[index] = updatedBlog
+    
+        await writeBlogs(blogs)
+        res.send("Uploaded on Cloudinary!")
+      } catch (error) {
+        next(error)
+      }
+    })
     // for uploading cover image
-    blogsRouter.put("/:blogId/uploadCover",  multer().single("image"), uploadCover, async (req, res, next) =>{
+    blogsRouter.put("/:blogId/uploadCover",  multer().single('image'), uploadCover, async (req, res, next) =>{
       console.log(req.file.imageUrl)    
       console.log('hi')
     try {

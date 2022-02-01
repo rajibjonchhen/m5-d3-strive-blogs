@@ -7,17 +7,3 @@ export const newBlogValidation = [
 ]
 
 
-/*{	
-    "category": "Scifi",
-    "title": "Out of the world",
-    "cover":"https://1.bp.blogspot.com/-CCiFxYsX8_8/YLmYYaTn4OI/AAAAAAABAxw/SNKOxdrwtr0Z4ESPR1NTw9IKSiJcpzk6QCLcBGAsYHQ/s1600/Ancient_Gods_by_fresh_style.jpg",
-    "readTime": {
-        "value": 2,
-      "unit": "minute"
-     },
-    "author": {
-        "name": "Stefen",
-        "avatar":"AUTHOR AVATAR LINK"
-        },
-     "content":"HTML"
-    }*/
