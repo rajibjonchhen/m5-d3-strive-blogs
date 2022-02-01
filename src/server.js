@@ -14,7 +14,7 @@ const port = process.env.PORT || 3001
 console.log(process.env.PORT)
 const publicFolderPath = join(process.cwd(), "./public")
 
-const whiteListOrigins = [process.env.FE_DEV_URL, process.env.FE_PROD_URL]
+const whiteListOrigins = [process.env.FE_DEV_URL, process.env.REACT_APP_URL]
 
 console.table(whiteListOrigins)
 
