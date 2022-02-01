@@ -10,11 +10,21 @@ import createHttpError from "http-errors"
 import { badRequestHandler, unauthorizedHandler, notFoundHandler, genericErrorHandler } from './service/errorHandler.js'
 
 const server = express()
-const port = 3001
-
+const port = process.env.PORT || 3001
+console.log(process.env.PORT)
 const publicFolderPath = join(process.cwd(), "./public")
 
-server.use(cors())
+const whiteListOrigins = [process.env.FE_DEV_URL, process.env.FE_PROD_URL]
+
+console.table(whiteListOrigins)
+
+server.use(cors({origin: function(origin,next){
+    if(!origin || whiteListOrigins.IndexOf(origin) !== -1){
+        next(null, true)
+    } else{
+        next(new Error('cor error'))
+    }
+}}))
 
 server.use(express.json())
 server.use(express.static(publicFolderPath))
