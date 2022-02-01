@@ -15,16 +15,17 @@ console.log(process.env.PORT)
 const publicFolderPath = join(process.cwd(), "./public")
 
 const whiteListOrigins = [process.env.FE_DEV_URL, process.env.FE_PROD_URL]
-
+console.log(origin)
 console.table(whiteListOrigins)
 
-server.use(cors({origin: function(origin,next){
-    if(!origin || whiteListOrigins.IndexOf(origin) !== -1){
-        next(null, true)
-    } else{
-        next(new Error('cor error'))
-    }
-}}))
+server.use(cors())
+// server.use(cors({origin: function(origin,next){
+//     if(!origin || whiteListOrigins.IndexOf(origin) !== -1){
+//         next(null, true)
+//     } else{
+//         next(new Error('cor error'))
+//     }
+// }}))
 
 server.use(express.json())
 server.use(express.static(publicFolderPath))
