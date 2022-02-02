@@ -1,10 +1,10 @@
 import PdfPrinter from "pdfmake"
+import axios from "axios";
 
 
 
 
-
-export const getPDFReadableStream = post => {
+export const getPDFReadableStream = async (post) => {
    const fonts = {
     Helvetica: {
         normal: "Helvetica",
@@ -15,16 +15,27 @@ export const getPDFReadableStream = post => {
 
   const printer = new PdfPrinter(fonts)
 
+  let imagePart = {};
+
+  if (blog.cover) {
+    const response = await axios.get(blog.cover, {
+      responseType: "arraybuffer",
+    });
+    const blogCoverURLParts = blog.cover.split("/");
+    const fileName = blogCoverURLParts[blogCoverURLParts.length - 1];
+    const [id, extension] = fileName.split(".");
+    const base64 = response.data.toString("base64");
+    const base64Image = `data:image/${extension};base64,${base64}`;
+    imagePart = { image: base64Image, width: 500, margin: [0, 0, 0, 40] };
+  }
+
   const docDefinition = {
     content: [
       {
         text: post.title,
         style: "header",
       },
-      {
-        image: post.cover,
-        width: 150
-    },
+      imagePart,
       
       {
           text: post.content,

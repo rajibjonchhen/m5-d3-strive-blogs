@@ -36,7 +36,7 @@ blogsRouter.get("/downloadpdf/:id", async(req, res, next) => {
     const searchedBlog = blogsArray.find(blog => blog.blogId === blogId)
 
     res.setHeader("Content-Disposition", `attachment; filename=download.pdf`)
-    const source = getPDFReadableStream(searchedBlog)
+    const source = await getPDFReadableStream(searchedBlog)
     const destination = res
     pipeline(source, destination, err => {
       if (err) next(err)
@@ -163,6 +163,8 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
         const index = blogs.findIndex(blog => blog.id === req.params.blogId)
         const oldBlog= blogs[index]
         const updatedBlog = { ...oldBlog, cover: req.file.path }
+        console.log(updatedBlog)
+       
         blogs[index] = updatedBlog
         await writeBlogs(blogs)
         res.send("Uploaded on Cloudinary!")
