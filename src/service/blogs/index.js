@@ -28,23 +28,25 @@ const cloudinaryUploader = multer({
 
 
 // pdf creater
-blogsRouter.get("/downloadpdf/:id", async(req, res, next) => {
-  
+// get single blogs
+blogsRouter.get("/:id/pdf", async (req, res, next) => {
   try {
     const blogsArray =  await getBlogs()
     const blogId = req.params.blogId
-    const searchedBlog = blogsArray.find(blog => blog.blogId === blogId)
-
-    res.setHeader("Content-Disposition", `attachment; filename=download.pdf`)
-    const source = await generateBlogPDF(searchedBlog)
-    const destination = res
-    pipeline(source, destination, err => {
-      if (err) next(err)
-    })
+    const blog = blogsArray.find(blog => blog.blogId === blogId)
+    if (!blog) {
+      res
+        .status(404)
+        .send({ message: `blog with ${req.params.id} is not found!` });
+    }
+    const pdfStream = await generateBlogPDF(blog);
+    res.setHeader("Content-Type", "application/pdf");
+    pdfStream.pipe(res);
+    pdfStream.end();
   } catch (error) {
-    next(error)
+    res.send(500).send({ message: error.message });
   }
-})
+});
 
 
 // for posting new blogs
