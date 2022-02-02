@@ -44,15 +44,14 @@ export const generateBlogPDF = async (blog) => {
       imagePart,
       { text: blog.title, fontSize: 20, bold: true, margin: [0, 0, 0, 40] },
       { text: striptags(blog.content), lineHeight: 2 },
-     ul=[
+    
         avatarPart,
-        { text:`${blog.comments[0].commentedAt}`, lineHeight: 2 },
+        { text:`${blog.comments[0].commentedAt}`, lineHeight: 2 , fontSize: 20, bold: true, margin: [0, 0, 0, 40] },
         { text:`${blog.comments[0].comment} ${blog.comments[0].rate}`, lineHeight: 2 },
         
-        { text:`${blog.comments[1].commentedAt}`, lineHeight: 2 },
+        { text:`${blog.comments[1].commentedAt}`, lineHeight: 2 , fontSize: 20, bold: true, margin: [0, 0, 0, 40] },
         { text:`${blog.comments[1].comment} ${blog.comments[0].rate}`, lineHeight: 2 },
         
-     ]
     ],
   };
 
