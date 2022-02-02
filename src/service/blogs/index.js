@@ -33,6 +33,7 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
   try {
     const blogsArray =  await getBlogs()
     const blogId = req.params.id
+    console.log("req.params.id",req.params.id)
     const blog = blogsArray.find(blog => blog.blogId === blogId)
     if (!blog) {
       res
