@@ -8,14 +8,14 @@ import { validationResult } from "express-validator"
 import { newBlogValidation } from "./validation.js" 
 import { getBlogs, writeBlogs, uploadCover ,uploadAvatar} from "../../lib/fs-tools.js";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
-import { v2 } from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 
 
 const blogsRouter = express.Router()
 
 const cloudinaryUploader = multer({
   storage: new CloudinaryStorage({
-    v2,
+  cloudinary,
     params:{
       folder:'blogs'
     }
@@ -114,7 +114,7 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
     })
 
 // upload avatar with cloudinary avatar
-    filesRouter.put("/:blogId/cloudinaryUploadAvatar", cloudinaryUploader, async (req, res, next) => {
+  blogsRouter.put("/:blogId/cloudinaryUploadAvatar", cloudinaryUploader, async (req, res, next) => {
       try {
         console.log(req.file)
         const blogs = await getBlogs()
@@ -135,19 +135,14 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
     })
 
     // upload cover with cloudinary
-    filesRouter.put("/:blogId/cloudinaryUploadCover", cloudinaryUploader, async (req, res, next) => {
+    blogsRouter.put("/:blogId/cloudinaryUploadCover", cloudinaryUploader, async (req, res, next) => {
       try {
         console.log(req.file)
         const blogs = await getBlogs()
-    
         const index = blogs.findIndex(blog => blog.id === req.params.blogId)
-    
         const oldBlog= blogs[index]
-    
         const updatedBlog = { ...oldBlog, cover: req.file.path }
-    
         blogs[index] = updatedBlog
-    
         await writeBlogs(blogs)
         res.send("Uploaded on Cloudinary!")
       } catch (error) {
