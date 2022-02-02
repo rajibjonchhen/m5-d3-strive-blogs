@@ -3,35 +3,34 @@ import PdfPrinter from "pdfmake"
 
 
 
-export const getPDFReadableStream = data => {
-  const fonts = {
-    Helvetica: {
-      normal: "Helvetica",
-      bold: "Helvetica-Bold",
-      italics: "Helvetica-Italics",
-    },
-  }
+
+export const getPDFReadableStream = post => {
+   const fonts = {
+        Roboto: {
+          normal: 'Roboto-Regular.ttf',
+          bold: 'Roboto-Medium.ttf',
+          italics: 'Roboto-Italic.ttf',
+          bolditalics: 'Roboto-MediumItalic.ttf'
+        }
+      };
 
   const printer = new PdfPrinter(fonts)
 
   const docDefinition = {
     content: [
       {
-        text: data,
+        text: post.title,
         style: "header",
       },
-      `${data.title}`,
       {
-          text: "Subheader 1 - using subheader style",
-          style: "subheader",
+          text: post.content,
+          style: ["quote", "small"],
         },
-        
-        `${data.content}`,
-     
-      {
-        text: "It is possible to apply multiple styles, by passing an array. This paragraph uses two styles: quote and small. When multiple styles are provided, they are evaluated in the specified order which is important in case they define the same properties",
-        style: ["quote", "small"],
-      },
+        {
+            text: "Comments",
+            style: "subheader",
+          },
+          `${post.comment}`
     ],
     styles: {
       header: {
@@ -48,9 +47,6 @@ export const getPDFReadableStream = data => {
       small: {
         fontSize: 8,
       },
-    },
-    defaultStyle: {
-      font: "Helvetica",
     },
   }
 

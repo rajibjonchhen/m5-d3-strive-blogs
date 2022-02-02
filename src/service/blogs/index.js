@@ -7,9 +7,12 @@ import createHttpError from "http-errors"
 import { validationResult } from "express-validator"
 import { newBlogValidation } from "./validation.js" 
 import { getBlogs, writeBlogs, uploadCover ,uploadAvatar} from "../../lib/fs-tools.js";
+// upload in cloudinary
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { v2 as cloudinary } from "cloudinary";
-
+// for file download
+import { pipeline } from "stream"
+import { getPDFReadableStream } from "../../lib/pdfMaker.js"
 
 const blogsRouter = express.Router()
 
@@ -25,12 +28,13 @@ const cloudinaryUploader = multer({
 
 
 // pdf creater
-blogsRouter.get("/:id/downloadPDF", async(req, res, next) => {
+blogsRouter.get("/:id/downloadpdf", async(req, res, next) => {
   
   try {
     const blogsArray =  await getBlogs()
     const blogId = req.params.blogId
     const searchedBlog = blogsArray.find(blog => blog.blogId === blogId)
+    
     res.setHeader("Content-Disposition", `attachment; filename=download.pdf`)
     const source = getPDFReadableStream(searchedBlog)
     const destination = res
