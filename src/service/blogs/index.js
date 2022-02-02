@@ -32,7 +32,7 @@ const cloudinaryUploader = multer({
 blogsRouter.get("/:id/pdf", async (req, res, next) => {
   try {
     const blogsArray =  await getBlogs()
-    const blogId = req.params.blogId
+    const blogId = req.params.id
     const blog = blogsArray.find(blog => blog.blogId === blogId)
     if (!blog) {
       res
@@ -44,7 +44,7 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
     pdfStream.pipe(res);
     pdfStream.end();
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ errMessage: error.message });
   }
 });
 
