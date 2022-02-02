@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 
-export const getPDFReadableStream = async (post) => {
+export const getPDFReadableStream = async (blog) => {
    const fonts = {
     Helvetica: {
         normal: "Helvetica",
@@ -32,20 +32,20 @@ export const getPDFReadableStream = async (post) => {
   const docDefinition = {
     content: [
       {
-        text: post.title,
+        text: blog.title,
         style: "header",
       },
       imagePart,
       
       {
-          text: post.content,
+          text: blog.content,
           style: ["quote", "small"],
         },
         {
             text: "Comments",
             style: "subheader",
           },
-          `${post.comment}`
+          `${blog.comment}`
     ],
     styles: {
       header: {
