@@ -22,6 +22,27 @@ const cloudinaryUploader = multer({
   })
 }).single("image")
 
+
+
+// pdf creater
+blogsRouter.get("/:id/downloadPDF", async(req, res, next) => {
+  
+  try {
+    const blogsArray =  await getBlogs()
+    const blogId = req.params.blogId
+    const searchedBlog = blogsArray.find(blog => blog.blogId === blogId)
+    res.setHeader("Content-Disposition", `attachment; filename=download.pdf`)
+    const source = getPDFReadableStream(searchedBlog)
+    const destination = res
+    pipeline(source, destination, err => {
+      if (err) next(err)
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+
 // for posting new blogs
 blogsRouter.post("/",  async (req,res,next)=>{ 
     try {
@@ -29,9 +50,8 @@ blogsRouter.post("/",  async (req,res,next)=>{
     // if(errorsList.isEmpty()){ 
         const blogsArray = await getBlogs()
         const uniqId = uniqid()
-        const body = {...req.body}
-        console.log(body)
-        const newBlog = {...body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[]}
+        console.log(req.body)
+        const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[]}
         blogsArray.push(newBlog)
        await writeBlogs(blogsArray)
         res.status(201).send({blogId: newBlog.blogId})
@@ -120,15 +140,10 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
       try {
         console.log(req.file)
         const blogs = await getBlogs()
-    
         const index = blogs.findIndex(blog => blog.id === req.params.blogId)
-    
         const oldBlog= blogs[index]
-    
         const updatedBlog = { ...oldBlog, author:{...oldBlog.author,avatar: req.file.path }}
-    
         blogs[index] = updatedBlog
-    
         await writeBlogs(blogs)
         res.send("Uploaded on Cloudinary!")
       } catch (error) {
