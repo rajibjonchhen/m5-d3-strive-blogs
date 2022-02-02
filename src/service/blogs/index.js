@@ -29,7 +29,9 @@ blogsRouter.post("/",  async (req,res,next)=>{
     // if(errorsList.isEmpty()){ 
         const blogsArray = await getBlogs()
         const uniqId = uniqid()
-        const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[]}
+        const body = {...req.body}
+        console.log(body)
+        const newBlog = {...body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[]}
         blogsArray.push(newBlog)
        await writeBlogs(blogsArray)
         res.status(201).send({blogId: newBlog.blogId})
