@@ -4,7 +4,8 @@ import blogsRouter from './service/blogs/index.js'
 import authorsRouter from './service/authors/index.js'
 // import filesRouter from './service/files/index.js'
 import { join, dirname } from "path";
-
+import morgan from "morgan";
+import helmet from "helmet";
 import cors from 'cors'
 import createHttpError from "http-errors"
 import { badRequestHandler, unauthorizedHandler, notFoundHandler, genericErrorHandler } from './service/errorHandler.js'
@@ -12,6 +13,9 @@ import { badRequestHandler, unauthorizedHandler, notFoundHandler, genericErrorHa
 const server = express()
 const port = process.env.PORT || 3001
 console.log(process.env.PORT)
+
+server.use(helmet());
+server.use(morgan("tiny"));
 const publicFolderPath = join(process.cwd(), "./public")
 
 const whiteListOrigins = [process.env.FE_DEV_URL, process.env.FE_PROD_URL,process.env.CLOUDINARY_URL]
@@ -20,7 +24,7 @@ console.table(whiteListOrigins)
 // server.use(cors())
 server.use(cors({origin: function(origin,next){
     console.log(origin)
-    if(!origin || whiteListOrigins.IndexOf(origin) !== -1){
+    if(!origin || whiteListOrigins.indexOf(origin) !== -1){
         next(null, true)
     } else{
         next(new Error('cor error'))
