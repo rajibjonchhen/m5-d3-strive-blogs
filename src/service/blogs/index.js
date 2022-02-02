@@ -32,7 +32,7 @@ blogsRouter.post("/",  async (req,res,next)=>{
         const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[]}
         blogsArray.push(newBlog)
        await writeBlogs(blogsArray)
-        res.status(201).send({msg:"New blog added with the id - " +blogId})
+        res.status(201).send({blogId: newBlog.blogId})
     // } else{
     //     next(createHttpError(400,"Error in creating new post",{errorsList}))
     // }
