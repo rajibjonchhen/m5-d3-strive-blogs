@@ -23,6 +23,11 @@ export const getPDFReadableStream = post => {
         style: "header",
       },
       {
+        image: post.cover,
+        width: 150
+    },
+      
+      {
           text: post.content,
           style: ["quote", "small"],
         },

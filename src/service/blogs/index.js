@@ -34,7 +34,7 @@ blogsRouter.get("/:id/downloadpdf", async(req, res, next) => {
     const blogsArray =  await getBlogs()
     const blogId = req.params.blogId
     const searchedBlog = blogsArray.find(blog => blog.blogId === blogId)
-    
+
     res.setHeader("Content-Disposition", `attachment; filename=download.pdf`)
     const source = getPDFReadableStream(searchedBlog)
     const destination = res
@@ -54,7 +54,7 @@ blogsRouter.post("/",  async (req,res,next)=>{
     // if(errorsList.isEmpty()){ 
         const blogsArray = await getBlogs()
         const uniqId = uniqid()
-        console.log(req.body)
+        console.log({body:req.body})
         const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[]}
         blogsArray.push(newBlog)
        await writeBlogs(blogsArray)
