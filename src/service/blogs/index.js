@@ -44,7 +44,7 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
     pdfStream.pipe(res);
     pdfStream.end();
   } catch (error) {
-    res.send(500).send({ message: error.message });
+    res.status(500).send({ message: error.message });
   }
 });
 
