@@ -28,7 +28,7 @@ const cloudinaryUploader = multer({
 
 
 // pdf creater
-blogsRouter.get("/:id/downloadpdf", async(req, res, next) => {
+blogsRouter.get("/downloadpdf/:id", async(req, res, next) => {
   
   try {
     const blogsArray =  await getBlogs()
@@ -50,8 +50,8 @@ blogsRouter.get("/:id/downloadpdf", async(req, res, next) => {
 // for posting new blogs
 blogsRouter.post("/",  async (req,res,next)=>{ 
     try {
-    // const errorsList = validationResult(req)
-    // if(errorsList.isEmpty()){ 
+    const errorsList = validationResult(req)
+    if(errorsList.isEmpty()){ 
         const blogsArray = await getBlogs()
         const uniqId = uniqid()
         console.log({body:req.body})
@@ -59,9 +59,9 @@ blogsRouter.post("/",  async (req,res,next)=>{
         blogsArray.push(newBlog)
        await writeBlogs(blogsArray)
         res.status(201).send({blogId: newBlog.blogId})
-    // } else{
-    //     next(createHttpError(400,"Error in creating new post",{errorsList}))
-    // }
+    } else{
+        next(createHttpError(400,"Error in creating new post",{errorsList}))
+    }
     
     } catch (error) {
         next(error)

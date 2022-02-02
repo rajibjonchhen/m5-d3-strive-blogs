@@ -5,14 +5,14 @@ import PdfPrinter from "pdfmake"
 
 
 export const getPDFReadableStream = post => {
-   const fonts = {
-        Roboto: {
-          normal: 'Roboto-Regular.ttf',
-          bold: 'Roboto-Medium.ttf',
-          italics: 'Roboto-Italic.ttf',
-          bolditalics: 'Roboto-MediumItalic.ttf'
-        }
-      };
+//    const fonts = {
+//         Roboto: {
+//           normal: 'Roboto-Regular.ttf',
+//           bold: 'Roboto-Medium.ttf',
+//           italics: 'Roboto-Italic.ttf',
+//           bolditalics: 'Roboto-MediumItalic.ttf'
+//         }
+//       };
 
   const printer = new PdfPrinter(fonts)
 
