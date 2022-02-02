@@ -151,7 +151,7 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
         const updatedBlog = { ...oldBlog, author:{...oldBlog.author,avatar: req.file.path }}
         blogs[index] = updatedBlog
         await writeBlogs(blogs)
-        res.send("Uploaded on Cloudinary!")
+        res.send({avatar:updatedBlog.author.avatar})
       } catch (error) {
         next(error)
       }
@@ -169,49 +169,49 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
        
         blogs[index] = updatedBlog
         await writeBlogs(blogs)
-        res.send("Uploaded on Cloudinary!")
+        res.send({cover:updatedBlog.cover})
       } catch (error) {
         next(error)
       }
     })
-    // for uploading cover image
-    blogsRouter.put("/:blogId/uploadCover",  multer().single('image'), uploadCover, async (req, res, next) =>{
-      console.log(req.file.imageUrl)    
-      console.log('hi')
-    try {
-            const blogId = req.params.blogId
-            const blogsArray = await getBlogs()
-            const index = blogsArray.findIndex(blog => blog.blogId === blogId)
-            const oldBlog = blogsArray[index]
-            const updatedBlog = {...oldBlog, cover:req.file.imageUrl, updatedAt:new Date()}
-            blogsArray[index]  = updatedBlog
-            await writeBlogs(blogsArray)
-            res.send("cover photo added")
-        } catch (error) {
-         next(error)   
-        }
-        })
+    // for uploading cover image in localhost
+    // blogsRouter.put("/:blogId/uploadCover",  multer().single('image'), uploadCover, async (req, res, next) =>{
+    //   console.log(req.file.imageUrl)    
+    //   console.log('hi')
+    // try {
+    //         const blogId = req.params.blogId
+    //         const blogsArray = await getBlogs()
+    //         const index = blogsArray.findIndex(blog => blog.blogId === blogId)
+    //         const oldBlog = blogsArray[index]
+    //         const updatedBlog = {...oldBlog, cover:req.file.imageUrl, updatedAt:new Date()}
+    //         blogsArray[index]  = updatedBlog
+    //         await writeBlogs(blogsArray)
+    //         res.send("cover photo added")
+    //     } catch (error) {
+    //      next(error)   
+    //     }
+    //     })
 
     
     
-        // for uploading the avatar
-blogsRouter.put("/:blogId/uploadAvatar", multer().single("image"), uploadAvatar, async (req, res, next) => {  
-  try {
-    const blogId = req.params.blogId
-    const blogsArray = await getBlogs()
-    const index = blogsArray.findIndex(blog => blog.blogId === blogId)
-    const oldBlog  = blogsArray[index]
-    console.log("i m runnig", req.file.imageUrl)
-    const updatedBlog = {...oldBlog, author:{...oldBlog.author, avatar:req.file.imageUrl, updatedAt: new Date()}}
-    blogsArray[index] = updatedBlog
-    console.log("author's avatar added",req.file.imageUrl)    
-    await writeBlogs(blogsArray)
+        // for uploading the avatar in localhost
+// blogsRouter.put("/:blogId/uploadAvatar", multer().single("image"), uploadAvatar, async (req, res, next) => {  
+//   try {
+//     const blogId = req.params.blogId
+//     const blogsArray = await getBlogs()
+//     const index = blogsArray.findIndex(blog => blog.blogId === blogId)
+//     const oldBlog  = blogsArray[index]
+//     console.log("i m runnig", req.file.imageUrl)
+//     const updatedBlog = {...oldBlog, author:{...oldBlog.author, avatar:req.file.imageUrl, updatedAt: new Date()}}
+//     blogsArray[index] = updatedBlog
+//     console.log("author's avatar added",req.file.imageUrl)    
+//     await writeBlogs(blogsArray)
     
-    res.send("author's avatar added")
-    } catch (error) {
-      next(error)
-    }
-  })
+//     res.send("author's avatar added")
+//     } catch (error) {
+//       next(error)
+//     }
+//   })
   
   
 
