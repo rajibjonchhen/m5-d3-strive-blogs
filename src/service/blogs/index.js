@@ -137,7 +137,7 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
     // upload cover with cloudinary
     blogsRouter.put("/:blogId/cloudinaryUploadCover", cloudinaryUploader, async (req, res, next) => {
       try {
-        console.log(req.file)
+        console.log("--> ",req.file)
         const blogs = await getBlogs()
         const index = blogs.findIndex(blog => blog.id === req.params.blogId)
         const oldBlog= blogs[index]
