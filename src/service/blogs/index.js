@@ -151,7 +151,7 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
         const updatedBlog = { ...oldBlog, author:{...oldBlog.author,avatar: req.file.path }}
         blogs[index] = updatedBlog
         await writeBlogs(blogs)
-        res.send({avatar:updatedBlog.author.avatar})
+        res.send(updatedBlog)
       } catch (error) {
         next(error)
       }
@@ -169,7 +169,7 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
        
         blogs[index] = updatedBlog
         await writeBlogs(blogs)
-        res.send({cover:updatedBlog.cover})
+        res.send(updatedBlog)
       } catch (error) {
         next(error)
       }
