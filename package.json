@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/rajibjonchhen/m5-d3-strive-blogs#readme",
   "dependencies": {
+    "@sendgrid/mail": "^7.6.0",
     "axios": "^0.25.0",
     "cloudinary": "^1.28.1",
     "cors": "^2.8.5",
