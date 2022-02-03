@@ -4,7 +4,7 @@ import json2csv from "json2csv"
 import {createGzip} from "zlib"
 import { getPDFReadableStream, generatePDFAsync } from "../../lib/pdfMaker.js"
 import { getBlogsReadableStream } from "../../lib/fs-tools.js"
-import {sendRegistrationEmail} from "../../lib/email-tools.js"
+
 const filesRouter = express.Router()
 
 filesRouter.get("/downloadPdf",async(req,res,next)=>{
@@ -45,10 +45,7 @@ try {
 }
 })
 
-filesRouter.get("/sendEmail", async (req, res, next) => {
-    sendRegistrationEmail()
-    res.send("email send")
-    })
+
 
 
 export default filesRouter

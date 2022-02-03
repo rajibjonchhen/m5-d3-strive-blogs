@@ -13,6 +13,7 @@ import { v2 as cloudinary } from "cloudinary";
 // for file download
 import { pipeline } from "stream"
 import { getPDFReadableStream } from "../../lib/pdfMaker.js"
+import {sendNewBlog} from '../../lib/email-tools.js'
 
 const blogsRouter = express.Router()
 
@@ -61,8 +62,9 @@ blogsRouter.post("/",  async (req,res,next)=>{
         const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[]}
         blogsArray.push(newBlog)
         console.log("from post new ",newBlog, req.body)
-       await writeBlogs(blogsArray)
-        res.status(201).send({blogId: newBlog.blogId})
+        await writeBlogs(blogsArray)
+        sendNewBlog(newBlog)
+        res.status(201).send(newBlog)
     } else{
         next(createHttpError(400,"Error in creating new post",{errorsList}))
     }
@@ -112,7 +114,7 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
     const blogId = req.params.blogId
     const index = blogsArray.findIndex(blog => blog.blogId === blogId)
     const oldBlog = blogsArray[index]
-    const updatedBlog = {...oldBlog, ...req.body, updatedAt:new Date()}
+    const updatedBlog = {...oldBlog, ...req.body, updatedAt:new Date(),author:{}}
     blogsArray[index] = updatedBlog
     await writeBlogs(blogsArray)
     res.send(updatedBlog)
@@ -148,11 +150,19 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
         const blogs = await getBlogs()
         const index = blogs.findIndex(blog => blog.id === req.params.blogId)
         const oldBlog= blogs[index]
-        const updatedBlog = { ...oldBlog, author:{...oldBlog.author,avatar: req.file.path }}
-        blogs[index] = updatedBlog
-        console.log("index oldblog and updatedblog",index, oldBlog,updatedBlog)
-        await writeBlogs(blogs)
-        res.send(updatedBlog)
+        console.log("old blog",oldBlog,"index", index)
+
+        if(index !== -1){
+          oldBlog.author = {...oldBlog.author, avatar:req.file.path}
+          const updatedBlog = { ...oldBlog, author:{...oldBlog.author,avatar: req.file.path }}
+          blogs[index] = oldBlog
+          console.log("index oldblog and updatedblog",index, oldBlog)
+          await writeBlogs(blogs)
+          res.send(updatedBlog)
+        } else{
+          res.send({err:`avatar url can not be updated ${blogId} not found and index is ${index}`})
+          
+        }
       } catch (error) {
         next(error)
       }

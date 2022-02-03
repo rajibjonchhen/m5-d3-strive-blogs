@@ -25,6 +25,6 @@ export const sendNewBlog = async (newBlog) => {
   
       const res = await sgMail.send(msg);
     } catch (error) {
-      console.log({ errors: error.response.body.errors });
+      console.log({ errors: error });
     }
   };
