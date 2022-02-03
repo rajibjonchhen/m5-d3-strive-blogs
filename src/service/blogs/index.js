@@ -58,7 +58,7 @@ blogsRouter.post("/",  async (req,res,next)=>{
         const blogsArray = await getBlogs()
         const uniqId = uniqid()
         console.log({body:req.body})
-        const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[]}
+        const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[],author:{name:"",avatar:""}}
         blogsArray.push(newBlog)
        await writeBlogs(blogsArray)
         res.status(201).send({blogId: newBlog.blogId})
@@ -152,7 +152,6 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
         const updatedBlog = { ...oldBlog, author:{...oldBlog.author,avatar: req.file.path }}
         blogs[index] = updatedBlog
         console.log("oldblog and updatedblog",oldBlog,updatedBlog)
-       
         await writeBlogs(blogs)
         res.send(updatedBlog)
       } catch (error) {
@@ -169,7 +168,6 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
         const oldBlog= blogs[index]
         const updatedBlog = { ...oldBlog, cover: req.file.path }
         console.log("oldblog and updatedblog",oldBlog,updatedBlog)
-       
         blogs[index] = updatedBlog
         await writeBlogs(blogs)
         res.send(updatedBlog)
