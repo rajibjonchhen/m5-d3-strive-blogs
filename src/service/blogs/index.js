@@ -151,6 +151,8 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
         const oldBlog= blogs[index]
         const updatedBlog = { ...oldBlog, author:{...oldBlog.author,avatar: req.file.path }}
         blogs[index] = updatedBlog
+        console.log("oldblog and updatedblog",oldBlog,updatedBlog)
+       
         await writeBlogs(blogs)
         res.send(updatedBlog)
       } catch (error) {
@@ -166,7 +168,7 @@ blogsRouter.put("/:blogId", async (req,res,next)=>{
         const index = blogs.findIndex(blog => blog.id === req.params.blogId)
         const oldBlog= blogs[index]
         const updatedBlog = { ...oldBlog, cover: req.file.path }
-        console.log(updatedBlog)
+        console.log("oldblog and updatedblog",oldBlog,updatedBlog)
        
         blogs[index] = updatedBlog
         await writeBlogs(blogs)
