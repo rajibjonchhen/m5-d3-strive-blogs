@@ -32,7 +32,7 @@ export const generateBlogPDF = async (blog) => {
       responseType: "arraybuffer",
     });
     const avatarURLParts = blog.author.avatar.split("/");
-    const fileName = avatarURLParts[blogCoverURLParts.length - 1];
+    const fileName = avatarURLParts[blog.author.avatar.length - 1];
     const [id, extension] = fileName.split(".");
     const base64 = response.data.toString("base64");
     const base64Image = `data:image/${extension};base64,${base64}`;
