@@ -33,17 +33,18 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
   try {
     const blogsArray =  await getBlogs()
     const blogId = req.params.id
-    console.log("req.params.id",req.params.id)
     const blog = blogsArray.find(blog => blog.blogId === blogId)
     if (!blog) {
       res
-        .status(404)
-        .send({ message: `blog with ${req.params.id} is not found!` });
+      .status(404)
+      .send({ message: `blog with ${req.params.id} is not found!` });
+    } else{
+      console.log("req.params.id and blog",req.params.id, blog)
+      const pdfStream = await generateBlogPDF(blog);
+      res.setHeader("Content-Type", "application/pdf");
+      pdfStream.pipe(res);
+      pdfStream.end();
     }
-    const pdfStream = await generateBlogPDF(blog);
-    res.setHeader("Content-Type", "application/pdf");
-    pdfStream.pipe(res);
-    pdfStream.end();
   } catch (error) {
     res.status(500).send({ errMessage: error.message });
   }
@@ -57,9 +58,9 @@ blogsRouter.post("/",  async (req,res,next)=>{
     if(errorsList.isEmpty()){ 
         const blogsArray = await getBlogs()
         const uniqId = uniqid()
-        console.log({body:req.body})
         const newBlog = {...req.body,createdAt:new Date(),blogId:uniqId, cover:`http://localhost:3001/blogs/${uniqId}`,comments:[]}
         blogsArray.push(newBlog)
+        console.log("from post new ",newBlog, req.body)
        await writeBlogs(blogsArray)
         res.status(201).send({blogId: newBlog.blogId})
     } else{
