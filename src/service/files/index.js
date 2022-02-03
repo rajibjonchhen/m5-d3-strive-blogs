@@ -1,29 +1,46 @@
 import express from "express"
-import multer from "multer"
-import { saveAuthorAvatar, saveBlogPostCover } from "../../lib/fs-tools.js"
-
+import {pipeline} from "stream"
+import json2csv from "json2csv"
+import {createGzip} from "zlib"
+import { getPDFReadableStream, generatePDFAsync } from "../../lib/pdfMaker.js"
+import { getBlogsReadableStream } from "../../lib/fs-tools.js"
 const filesRouter = express.Router()
 
-// for avatar
-// filesRouter.post("/uploadSingleAvatar", multer().single("avatar"), async (req, res, next) => {
-//   try {
-//     console.log("FILE: ", req.file)
-//     await saveAuthorAvatar(req.file.originalname, req.file.buffer)
-//     res.send("author's avatar added")
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+filesRouter.get("/downloadPdf",async(req,res,next)=>{
 
+    try {
+        res.setHeader("Content-Disposition","attachment=test.pdf")
+        const source = getPDFReadableStream("My Blogs")
+        const destination = res
+        pipeline(source,destination, err => {
+            if(err) next(err)
+        })
+    } catch (error) {
+        next(error)
+    }
+})
 
-// for cover picture
-// filesRouter.post("/uploadSingleCover", multer().single("cover"), async (req, res, next) =>{
-//     try {
-//         await saveBlogPostCover(req.file.originalname, req.file.buffer)
-//         res.send("cover photo added")
-//     } catch (error) {
-        
-//     }
-//     })
+filesRouter.get("/downloadCSV", (req, res, next) => {
+    try {  
+    res.setHeader("Content-Disposition", "attachment; filename=books.csv")
+    const source = getBlogsReadableStream()
+    const transform = new json2csv.Transform({ fields: ["asin", "title", "price", "category"] })
+    const destination = res
 
+    pipeline(source, transform, destination, err => {
+    if (err) next(err)
+    })
+} catch (error) {
+    next(error)
+}
+})
+
+filesRouter.get("/asyncPDF", async (req, res, next) => {
+try {
+    const path = await generatePDFAsync()
+    res.send({ path })
+} catch (error) {
+    next(error)
+}
+})
 export default filesRouter

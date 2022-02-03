@@ -4,7 +4,7 @@ import { fileURLToPath } from "url"
 import { join, dirname, extname } from "path"
 
 
-const { readJSON, writeJSON, writeFile } = fs
+const { readJSON, writeJSON, writeFile, createReadStream } = fs
 
 const dataFolderPath = join(dirname(fileURLToPath(import.meta.url)), "../data")
 const authorsJSONPath = join(dataFolderPath, "authors.json")
@@ -54,5 +54,7 @@ export const uploadAvatar = (req, res, next) => {
         next(error)
     }
     }
+
+    export const getBlogsReadableStream = () => createReadStream(blogsJSONPath)
 
 

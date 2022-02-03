@@ -12,7 +12,7 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { v2 as cloudinary } from "cloudinary";
 // for file download
 import { pipeline } from "stream"
-import { generateBlogPDF } from "../../lib/pdfMaker.js"
+import { getPDFReadableStream } from "../../lib/pdfMaker.js"
 
 const blogsRouter = express.Router()
 
@@ -40,7 +40,7 @@ blogsRouter.get("/:id/pdf", async (req, res, next) => {
       .send({ message: `blog with ${req.params.id} is not found!` });
     } else{
       console.log("req.params.id and blog",req.params.id, blog)
-      const pdfStream = await generateBlogPDF(blog);
+      const pdfStream = await getPDFReadableStream(blog);
       res.setHeader("Content-Type", "application/pdf");
       pdfStream.pipe(res);
       pdfStream.end();
