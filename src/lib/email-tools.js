@@ -1,16 +1,30 @@
 
 import sgMail from "@sendgrid/mail"
-
+import { getPDFReadableStream } from "./pdfMaker.js";
 sgMail.setApiKey(process.env.SENDGRID_KEY)
 
-export const sendRegistrationEmail = async () => {
-const msg = {
-    to: 'onlyrajib@gmail.com',
-    from: process.env.SENDER_EMAIL, 
-    subject: "Sending with SendGrid is Fun",
-    text: "and easy to do anywhere, even with Node.js",
-    html: "<strong>and easy to do anywhere, even with Node.js</strong>",
-}
-
-await sgMail.send(msg)
-}
+export const sendNewBlog = async (newBlog) => {
+    try {
+      const data = await getPDFReadableStream(newBlog, true);
+  
+      const msg = {
+        to: newBlog.email,
+        from: process.env.SENDGRID_EMAIL,
+        subject: "New Post",
+        text: "you created a new post",
+        attachments: [
+          {
+            content: data.toString("base64"),
+            filename: `${newBlog.title}.pdf`,
+            type: "application/pdf",
+            disposition: "attachment",
+            content_id: "mytext",
+          },
+        ],
+      };
+  
+      const res = await sgMail.send(msg);
+    } catch (error) {
+      console.log({ errors: error.response.body.errors });
+    }
+  };
