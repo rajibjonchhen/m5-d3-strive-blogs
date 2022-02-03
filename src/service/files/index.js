@@ -23,8 +23,7 @@ filesRouter.get("/downloadPdf",async(req,res,next)=>{
 filesRouter.get("/downloadCSV", (req, res, next) => {
     try {  
     res.setHeader("Content-Disposition", "attachment; filename=books.csv")
-    const source = join(process.cwd(),'/src/data/authors.json')
-    // const source = getBlogsReadableStream()
+    const source = getBlogsReadableStream()
     const transform = new json2csv.Transform({ fields: ["asin", "title", "price", "category"] })
     const destination = res
 
