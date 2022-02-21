@@ -34,7 +34,6 @@ server.use(cors({origin: function(origin,next){
 
 server.use(express.json())
 server.use(express.static(publicFolderPath))
-console.table(listEndpoints(server))
 
 server.use("/blogs",blogsRouter)
 server.use("/authors",authorsRouter)
@@ -46,6 +45,7 @@ server.use(unauthorizedHandler)
 server.use(notFoundHandler)
 server.use(genericErrorHandler)
 
+console.table(listEndpoints(server))
 server.listen(port,() =>{
 console.log(`server is running in ${port}`)
 })

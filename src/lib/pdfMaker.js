@@ -6,7 +6,7 @@ import { fileURLToPath } from "url"
 
 export const getPDFReadableStream = async (blog) => {
 const fonts = {
-  Helvetica: {
+  Roboto: {
     normal: "Helvetica",
     bold: "Helvetica-Bold",
     italics: "Helvetica-Oblique",
@@ -47,7 +47,7 @@ const printer = new PdfPrinter(fonts);
       imagePart,
       { text: blog.title, fontSize: 20, bold: true, margin: [0, 0, 0, 40] },
       { text: striptags(blog.content), lineHeight: 2 },
-    
+      
         // avatarPart,
         // { text:`${blog.comments[0].commentedAt}`, lineHeight: 2 , fontSize: 20, bold: true, margin: [0, 0, 0, 40] },
         // { text:`${blog.comments[0].comment} ${blog.comments[0].rate}`, lineHeight: 2 },
